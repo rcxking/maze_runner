@@ -27,3 +27,6 @@
 *.exe
 *.out
 *.app
+
+# Hex files
+*.hex
