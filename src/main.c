@@ -9,7 +9,7 @@
  * Bryant Pong
  * 8/28/16
  *
- * Last Updated: 8/29/16
+ * Last Updated: 9/4/16
  */
 
 // 3rd Party Libraries:
@@ -24,6 +24,8 @@
  */
 const char intro_line1[] PROGMEM = "Maze";
 const char intro_line2[] PROGMEM = "Solver";  
+const char calib_line1[] PROGMEM = "Calib.";
+const char calib_line2[] PROGMEM = "Sensors";
 
 /*
  * Sounds for debugging.   
@@ -54,8 +56,24 @@ enum JUNCTION_TYPES
 
 /***** FUNCTION PROTOTYPES *****/
 void InitializeRobot();
+void CalibrateLineSensors();
 enum JUNCTION_TYPES DetermineJunctionType(); 
 /***** END SECTION FUNCTION PROTOTYPES *****/
+
+/*
+ * This helper function spins the robot in place
+ * by 45 degrees so the line sensors can calibrate.       
+ */
+void CalibrateLineSensors()
+{
+	// Display a message for beginning calibration:
+	print_from_program_space( calib_line1 );
+	lcd_goto_xy( 0, 1 );
+	print_from_program_space( calib_line2 );
+	play_from_program_space( beep );
+	delay( 1000 );
+	clear();
+}
 
 /*
  * This function initializes the 3pi.  This includes
@@ -71,7 +89,7 @@ void InitializeRobot()
 	print_from_program_space( intro_line1 );
 	lcd_goto_xy( 0, 1 ); // Move to the second line
 	print_from_program_space( intro_line2 );
-	play_from_program_space( beep )
+	play_from_program_space( beep );
 	delay( 1000 );
 
 	// Clear the display:
@@ -82,6 +100,9 @@ void InitializeRobot()
 	 * 3pi uses 4 AAA batteries (at 1.5 Volts a piece). 
 	 *   
 	 */
+
+	// Finally, spin in place and calibrate the line sensors:
+	CalibrateLineSensors();
 }
 
 // Main function:
