@@ -7,7 +7,7 @@ MCU = atmega328p
 CFLAGS=-g -Wall -mcall-prologues -mmcu=$(MCU) $(DEVICE_SPECIFIC_CFLAGS) -Os 
 
 # AVR Compiler:
-CC=avr-gcc
+CC=avr-g++
 
 # Object Copy program:
 OBJ2HEX=avr-objcopy
