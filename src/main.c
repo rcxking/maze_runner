@@ -9,7 +9,7 @@
  * Bryant Pong
  * 8/28/16
  *
- * Last Updated: 9/5/16
+ * Last Updated: 9/16/16
  */
 
 // 3rd Party Libraries:
@@ -60,8 +60,11 @@ enum JUNCTION_TYPES
 
 /***** FUNCTION PROTOTYPES *****/
 void Display2Lines( const char *line1, const char *line2 );
+void OnForXMSecs( const int leftPower, const int rightPower, const int millisecs ); 
 void InitializeRobot();
 void CalibrateLineSensors();
+void PerformMappingRun();
+void PerformActualRun();
 enum JUNCTION_TYPES DetermineJunctionType(); 
 /***** END SECTION FUNCTION PROTOTYPES *****/
 
@@ -77,6 +80,18 @@ void Display2Lines( const char *line1, const char *line2 )
 	play_from_program_space( beep );
 	delay( 1000 );
 	clear();
+}
+
+/*
+ * This function sets the motors to run at their specified
+ * speeds for the given number of milliseconds.  
+ */
+void OnForXMSecs( const int leftPower, const int rightPower,
+                  const int millisecs )
+{
+	set_motors( leftPower, rightPower );
+	delay_ms( millisecs );
+	set_motors( 0, 0 );
 }
 
 /*

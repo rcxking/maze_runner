@@ -39,6 +39,9 @@ public:
 	~List();
 	List& operator=( const List& rhs );
 
+	void push_front( const T& obj );
+	void push_back( const T& obj ); 
+
 private:
 	// Length of this list:
 	unsigned int size_;
