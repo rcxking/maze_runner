@@ -8,7 +8,7 @@
  * Bryant Pong
  * 9/4/16
  *
- * Last Updated: 9/26/16 
+ * Last Updated: 9/29/16 
  */
 #ifndef _LIST_H_
 #define _LIST_H_
@@ -24,7 +24,7 @@ template <class T> class Node
 {
 public:
 	// Default Node Constructor:
-	Node() : next( NULL ), prev( NULL ) {}
+	Node() : value( 0 ), next( NULL ), prev( NULL ) {}
 
 
 	Node( const T& obj, Node *n, Node *p ) :
@@ -131,7 +131,7 @@ public:
 	List() : head_( NULL ), tail_( NULL ), size_( 0 ) {}
 
 	// Copy Constructor:
-	List( const List<T>& rhs );
+	List( const List<T>& rhs ) { this->copyList( rhs ); } 
 	// Destructor:
 	~List() { this->deleteList(); }
 	List& operator=( const List& rhs );
@@ -184,7 +184,7 @@ template <class T> List<T>& List<T>::operator=( const List<T>& rhs )
 template <class T> void List<T>::push_back( const T& value )
 {
 	// Check if the head is NULL:
-	if( head_ == NULL )
+	if( !head_ )
 	{
 		// Create a new node and make that the head:  
 		Node<T> *n = new Node<T>;
@@ -213,15 +213,122 @@ template <class T> void List<T>::push_back( const T& value )
 	}
 }
 
+template <class T> void List<T>::push_front( const T& value )
+{
+	Node<T> *n = new Node<T>;
+	size_++;
+
+	// Check if the head is NULL:
+	if( !head_ )
+	{
+		// Create a new node and make that the head:
+		n->value = value;
+		n->next = NULL;
+		n->prev = NULL;
+
+		head_ = n;
+		tail_ = n;
+	}
+	else
+	{
+		// Create a new node and make that the head:
+		n->value = value;
+		n->next = head_;
+		n->prev = NULL;
+
+		head_ = n;	
+	}
+}
+
+// pop_back/pop_front:
+template <class T> void List<T>::pop_back()
+{
+	// Set the tail to point to the node before the tail:
+	tail_ = tail_->prev;
+	delete tail_->next; 
+	tail_->next = NULL;
+
+	size_--; 			
+}
+
+template <class T> void List<T>::pop_front()
+{
+	// Set the head to point to the node after the head:
+	head_ = head_->next;
+	delete head_->prev;
+	head_->prev = NULL;
+	size_--;	  
+}
+
 // Function to go through the linked list and copy all objects:
 template <class T> void List<T>::copyList( const List<T>& rhs )
 {
+	if( rhs.size_ == 0 )
+	{
+		return;
+	}
+
+	if( rhs.size_ == 1 )
+	{
+		Node<T> *onlyNode = new Node<T>; 		
+		onlyNode->value = rhs.head_->value;
+		onlyNode->next = NULL;
+		onlyNode->prev = NULL;
+
+		head_ = onlyNode;
+		tail_ = onlyNode;
+		size_ = 1;		
+
+		return;
+	}
+
+	Node<T> *rhsNode;
+
+	Node<T> *newHead = new Node<T>;
+	newHead->value = rhs.head_->value;
+	newHead->prev = NULL;
+	
+	head_ = newHead;
+	tail_ = newHead;
+	size_ = 0;								 
+
+	Node<T> *q = head_; 
+
+	// Iterate through the rhs list and create/attach new nodes:
+	for( rhsNode = rhs.head_->next; rhsNode != NULL; rhsNode = rhsNode->next )
+	{ 
+	}
 }
 
 // Function to go through the linked list and delete all objects safely:
 template <class T> void List<T>::deleteList()
 {
-	
+	// If the list is of size 0, we're done:
+	if( size_ == 0 )
+	{
+		return;
+	}
+
+	// If the list is of size 1, delete the head_/tail_:
+	if( size_ == 1 )
+	{
+		delete head_;
+		head_ = NULL;
+		tail_ = NULL;
+		return;
+	}
+
+	// Iterate through the list, erasing the value and the previous:
+	Node<T> *n;
+	for( n = head_->next; n->next != NULL; n = n->next )
+	{
+		delete n->prev;		
+	}
+
+	delete tail_;
+
+	head_ = NULL;
+	tail_ = NULL;
 }
      
 
